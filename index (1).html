@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OS AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f1;--card:#fff;--ink:#14211c;--mut:#5d6b64;--ac:#0f6b5c;--acx:#fff;--gold:#e8b93c;--bd:#d5ddd7;--err:#b3261e}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1713;--card:#18231e;--ink:#eef3ef;--mut:#9aaba2;--ac:#3fbfa6;--acx:#0b1511;--bd:#2a3a33;--err:#ff8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;line-height:1.55}
+button,input,select,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bd);background:var(--card);flex-wrap:wrap}
+.logo{font-weight:700;font-size:1.35rem;letter-spacing:.5px;margin-right:auto}
+.logo b{color:var(--ac)}
+.pill{border:1px solid var(--bd);border-radius:999px;padding:3px 12px;font-size:.85rem;background:transparent;cursor:pointer}
+.pill.pro{background:var(--gold);border-color:var(--gold);color:#2a2000;font-weight:600}
+.btn{background:var(--ac);color:var(--acx);border:0;border-radius:10px;padding:10px 18px;font-weight:600;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.g{background:transparent;color:var(--ink);border:1px solid var(--bd)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+main{max-width:760px;margin:0 auto;padding:16px}
+.login{text-align:center;padding:64px 12px}
+.login h1{font-size:2rem;margin:0 0 6px}
+.login p{color:var(--mut);margin:0 0 24px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
+.tabs button{flex:1;min-width:92px;padding:10px 8px;border:1px solid var(--bd);background:var(--card);border-radius:10px;cursor:pointer;font-weight:500}
+.tabs button[aria-selected=true]{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.meter{font-size:.9rem;color:var(--mut);margin:0 0 12px}
+.bar{height:6px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--ac)}
+.msgs{min-height:240px;max-height:52vh;overflow:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.m{padding:9px 13px;border-radius:12px;max-width:88%;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--ac);color:var(--acx)}
+.m.a{align-self:flex-start;background:var(--bg);border:1px solid var(--bd)}
+.row{display:flex;gap:8px}
+input[type=text],textarea,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+textarea{min-height:110px;resize:vertical}
+label{display:block;font-weight:500;margin:10px 0 4px}
+.out{white-space:pre-wrap;margin-top:14px;padding:12px;border-radius:10px;background:var(--bg);border:1px solid var(--bd)}
+.note{color:var(--mut);font-size:.88rem;margin-top:8px}
+.err{color:var(--err);font-size:.92rem;margin-top:8px}
+.lock{text-align:center;padding:30px 10px;color:var(--mut)}
+
+:root{--edge:#0a4a40;--lift:#c3cdc6}
+@media(prefers-color-scheme:dark){:root{--edge:#1f7d6c;--lift:#0a110e}}
+body{background:radial-gradient(900px 520px at 12% -8%,rgba(63,191,166,.2),transparent),radial-gradient(700px 420px at 100% 0,rgba(232,185,60,.16),transparent),var(--bg);background-attachment:fixed;min-height:100vh}
+header{padding:16px 20px;box-shadow:0 4px 18px rgba(0,0,0,.1)}
+main{max-width:860px;padding:24px 16px 48px}
+.logo{font-size:1.9rem;text-shadow:1px 1px 0 var(--lift),2px 2px 0 var(--lift),3px 3px 0 var(--lift),4px 6px 8px rgba(0,0,0,.28)}
+.btn,.tabs button,.pill{transition:transform .12s,box-shadow .12s}
+.btn{border-radius:14px;padding:12px 22px;box-shadow:0 5px 0 var(--edge),0 10px 16px rgba(0,0,0,.2)}
+.btn:active:not(:disabled){transform:translateY(4px);box-shadow:0 1px 0 var(--edge),0 3px 6px rgba(0,0,0,.2)}
+.btn.g{box-shadow:0 5px 0 var(--lift),0 10px 16px rgba(0,0,0,.12)}
+.btn.g:active{box-shadow:0 1px 0 var(--lift)}
+.btn.big{font-size:1.2rem;padding:16px 36px}
+.pill{background:var(--card);box-shadow:0 3px 0 var(--lift)}
+.pill:active{transform:translateY(2px);box-shadow:0 1px 0 var(--lift)}
+.pill.pro{box-shadow:0 3px 0 #b88a12}
+.tabs{padding:4px 2px 12px}
+.tabs button{border-radius:14px;padding:12px 8px;box-shadow:0 5px 0 var(--lift),0 8px 12px rgba(0,0,0,.1)}
+.tabs button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--lift)}
+.tabs button[aria-selected=true]{transform:translateY(3px);box-shadow:0 2px 0 var(--edge),inset 0 2px 6px rgba(0,0,0,.28)}
+.panel{border-radius:22px;padding:20px;box-shadow:0 8px 0 var(--lift),0 24px 38px rgba(0,0,0,.15)}
+.msgs{min-height:320px}
+.m{box-shadow:0 3px 0 var(--lift),0 6px 10px rgba(0,0,0,.08)}
+.m.u{box-shadow:0 3px 0 var(--edge),0 6px 10px rgba(0,0,0,.16)}
+input[type=text],textarea,select{box-shadow:inset 0 3px 6px rgba(0,0,0,.14)}
+.out{box-shadow:inset 0 3px 6px rgba(0,0,0,.12)}
+.login{padding:24px 12px 56px}
+.login h1{font-size:clamp(3.2rem,14vw,5.6rem);margin:8px 0 4px;line-height:1.05;letter-spacing:1px;text-shadow:1px 1px 0 var(--lift),2px 2px 0 var(--lift),3px 3px 0 var(--lift),4px 4px 0 var(--lift),6px 10px 14px rgba(0,0,0,.28)}
+.login p{font-size:1.2rem;max-width:30ch;margin:0 auto 32px}
+.stage{perspective:800px;height:210px;display:grid;place-items:center}
+.cube{width:120px;height:120px;position:relative;transform-style:preserve-3d;transform:rotateX(-14deg) rotateY(0);animation:spin 16s linear infinite}
+.cube i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:1.15rem;border-radius:20px;color:var(--acx);background:linear-gradient(145deg,var(--ac),var(--edge));border:2px solid rgba(255,255,255,.3);box-shadow:inset 0 0 22px rgba(0,0,0,.3)}
+.cube i:nth-child(1){transform:translateZ(60px)}
+.cube i:nth-child(2){transform:rotateY(90deg) translateZ(60px)}
+.cube i:nth-child(3){transform:rotateY(180deg) translateZ(60px)}
+.cube i:nth-child(4){transform:rotateY(270deg) translateZ(60px)}
+@keyframes spin{to{transform:rotateX(-14deg) rotateY(360deg)}}
+.typing{display:inline-flex;gap:6px;padding:6px 4px;align-items:center}
+.typing b{width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 30% 28%,#fff,var(--ac) 45%,var(--edge));box-shadow:0 3px 3px rgba(0,0,0,.25);animation:hop 1s infinite}
+.typing b:nth-child(2){animation-delay:.15s}
+.typing b:nth-child(3){animation-delay:.3s}
+@keyframes hop{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.cube{animation:none;transform:rotateX(-14deg) rotateY(-28deg)}.typing b{animation:none}.btn,.tabs button,.pill{transition:none}}
+
+input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);box-shadow:inset 0 3px 6px rgba(0,0,0,.14)}
+.auth{max-width:380px;margin:0 auto;text-align:left}
+.auth .big{width:100%;font-size:1.05rem;padding:14px}
+.row2{display:flex;gap:8px;margin-top:14px}.row2 .btn{flex:1;padding:12px 8px}
+.lnk{background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;margin-top:10px;padding:4px 0}
+.or{text-align:center;color:var(--mut);margin:14px 0}
+.shell{display:grid;gap:16px}
+@media(min-width:820px){.shell{grid-template-columns:230px 1fr}main{max-width:1080px}}
+.side{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:12px;box-shadow:0 6px 0 var(--lift),0 16px 26px rgba(0,0,0,.12);align-self:start}
+.side summary{font-weight:600;cursor:pointer;padding:4px 2px}
+.btn.sm{padding:8px 12px;width:100%;margin:8px 0;font-size:.95rem}
+.hl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow:auto}
+.hl li{display:flex;gap:4px}
+.hi{flex:1;text-align:left;border:1px solid var(--bd);background:var(--bg);border-radius:10px;padding:7px 10px;cursor:pointer;display:flex;flex-direction:column;overflow:hidden}
+.hi small{color:var(--mut)}
+.hi.on{border-color:var(--ac);box-shadow:inset 3px 0 0 var(--ac)}
+.hx{border:0;background:none;color:var(--mut);cursor:pointer;font-size:1.2rem}
+
+.bar2{display:flex;gap:8px;margin-bottom:10px}.bar2 select{width:auto;flex:1}
+.sr{position:absolute;left:-9999px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chip{border:1px solid var(--bd);background:var(--bg);border-radius:999px;padding:7px 14px;cursor:pointer;box-shadow:0 3px 0 var(--lift);text-align:left}
+.chip:active{transform:translateY(2px);box-shadow:0 1px 0 var(--lift)}
+.m{position:relative}.m.a{padding-right:36px}
+.m pre,.out pre{background:#0f1713;color:#e8f3ee;padding:10px;border-radius:10px;overflow:auto;white-space:pre;margin:8px 0}
+.m code,.out code{font-family:ui-monospace,Menlo,monospace;font-size:.9em}
+.cp{position:absolute;top:6px;right:6px;border:0;background:none;color:var(--mut);cursor:pointer;font-size:1.05rem}
+
+.m.a{padding-right:13px}
+.acts{display:flex;gap:4px;margin-top:6px}
+.cp,.sp,.rg{position:static;border:0;background:none;color:var(--mut);cursor:pointer;font-size:1.05rem;padding:2px 6px;border-radius:8px}
+.cp:hover,.sp:hover,.rg:hover{background:var(--bd)}
+
+.cube i{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid rgba(255,255,255,.35)}
+.cube i:nth-child(1){background:linear-gradient(145deg,#7b61ff,#3a2fb5)}
+.cube i:nth-child(2){background:linear-gradient(145deg,#ff6b6b,#c2255c)}
+.cube i:nth-child(3){background:linear-gradient(145deg,#ffb703,#e85d04)}
+.cube i:nth-child(4){background:linear-gradient(145deg,#2ec4b6,#0b7285)}
+.stage{position:relative}
+.stage::before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:conic-gradient(#ff6b6b,#ffb703,#2ec4b6,#7b61ff,#ff6b6b);filter:blur(36px);opacity:.5;animation:ring 10s linear infinite}
+@keyframes ring{to{transform:rotate(360deg)}}
+.typing b:nth-child(1){background:radial-gradient(circle at 30% 28%,#fff,#ff6b6b 50%,#c2255c)}
+.typing b:nth-child(2){background:radial-gradient(circle at 30% 28%,#fff,#ffb703 50%,#e85d04)}
+.typing b:nth-child(3){background:radial-gradient(circle at 30% 28%,#fff,#2ec4b6 50%,#0b7285)}
+.typing b:nth-child(4){background:radial-gradient(circle at 30% 28%,#fff,#7b61ff 50%,#3a2fb5);animation-delay:.45s}
+.pill[aria-pressed=true]{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.bar2 .pill{white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.stage::before{animation:none}}
+
+.menu{position:relative}
+.kebab{font-size:1.5rem;line-height:1;padding:6px 15px;font-weight:700}
+.pop{position:absolute;right:0;top:calc(100% + 12px);min-width:230px;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:8px;display:flex;flex-direction:column;gap:6px;z-index:20;box-shadow:0 6px 0 var(--lift),0 18px 30px rgba(0,0,0,.2)}
+.pop[hidden]{display:none}
+.pop button{width:100%;text-align:left;border-radius:10px;padding:10px 12px;cursor:pointer;font-weight:500;box-shadow:none;font-size:1rem}
+.pop .btn.g{background:var(--bg);border:1px solid var(--bd);color:var(--ink)}
+.pop .pill:not(.pro){background:var(--bg);border:1px solid var(--bd)}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;z-index:50}
+.dlg{background:var(--card);border-radius:22px;padding:20px;max-width:420px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 8px 0 var(--lift),0 24px 48px rgba(0,0,0,.35)}
+.dlg h2{margin:0 0 8px}.dlg ul{padding-left:20px;margin:8px 0}
+.pay{background:var(--bg);border:1px dashed var(--ac);border-radius:12px;padding:10px 12px;margin:12px 0}
+
+.cmp{width:100%;border-collapse:collapse;font-size:.92rem;margin:8px 0}
+.cmp th,.cmp td{border-bottom:1px solid var(--bd);padding:6px 4px;text-align:center}
+.cmp td:first-child,.cmp th:first-child{text-align:left}
+.plans{display:grid;gap:8px;margin:10px 0}
+.pcard{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:2px 10px;border:1px solid var(--bd);border-radius:12px;padding:10px;cursor:pointer;margin:0;font-weight:400}
+.pcard input{grid-row:1/3}
+.pcard span{font-weight:700;grid-column:3}
+.pcard small{grid-column:2/4;color:var(--mut)}
+.pcard:has(input:checked){border-color:var(--ac);box-shadow:inset 0 0 0 2px var(--ac)}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stats div{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;text-align:center;box-shadow:0 3px 0 var(--lift)}
+.stats b{display:block;font-size:1.4rem}.stats small{color:var(--mut)}
+.al{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.ar{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--bd);border-radius:12px;padding:10px;background:var(--bg);flex-wrap:wrap}
+.aa{display:flex;gap:6px}.aa .btn{width:auto;margin:0}
+.adm h2,.adm h3{margin:6px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">OS <b>AI</b></div>
+  <div class="menu">
+    <button class="pill kebab" id="mb" aria-haspopup="true" aria-expanded="false" aria-label="Menu">⋮</button>
+    <div class="pop" id="pop" hidden>
+      <button class="pill" id="fs"></button>
+      <button class="pill" id="lang" aria-label="Language"></button>
+      <button class="pill" id="adm" hidden></button>
+      <button class="pill" id="plan" hidden></button>
+      <button class="btn g" id="out" hidden></button>
+    </div>
+  </div>
+</header>
+<main id="app"></main>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,getDoc,addDoc,updateDoc,writeBatch,deleteDoc,getDocs,query,where,orderBy,limit,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA3vP8xV35KGbGMhdaclN8DqRGNLzVJtkI",
+  authDomain: "os-ai-31982.firebaseapp.com",
+  projectId: "os-ai-31982",
+  storageBucket: "os-ai-31982.firebasestorage.app",
+  messagingSenderId: "758552741484",
+  appId: "1:758552741484:web:742a4cc3fe213653973a49",
+  measurementId: "G-W70ZTYZB83"
+};
+// আসল এআই সার্ভারের ঠিকানা এখানে বসবে (এখন ফাঁকা = নমুনা উত্তর)
+const AI_ENDPOINT = "";
+// প্রো-র টাকা নেওয়ার নম্বর ও তিনটা প্যাকেজের দাম এখানে বসান
+const PAY = {bkash:"01627342486", rocket:"01771548462", plans:[{id:"m1", price:"৳199", amount:199, per:"৳199 / mo"}, {id:"m6", price:"৳999", amount:999, per:"≈ ৳167 / mo", tag:"pop"}, {id:"y1", price:"৳1,799", amount:1799, per:"≈ ৳150 / mo", tag:"best"}]};
+
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+const LIM = {free:{secs:7200,imgs:4,mb:25}, pro:{secs:Infinity,imgs:20,mb:200}};
+
+const T = {
+bn:{tag:"চ্যাট, লেখা, ডকুমেন্ট আর ছবি/ডাটা, সব এক জায়গায়",login:"গুগল দিয়ে লগইন করুন",logout:"লগআউট",
+ chat:"চ্যাট",write:"লেখা",docs:"ডকুমেন্ট",data:"ছবি/ডাটা",free:"সাধারণ",pro:"প্রো",
+ left:"আজ বাকি",h:"ঘণ্টা",m:"মিনিট",locked:"আজকের ২ ঘণ্টা শেষ হয়েছে। কাল আবার ব্যবহার করুন, অথবা প্রো চালু করুন।",
+ ph:"আপনার প্রশ্ন লিখুন",send:"পাঠান",kind:"কী লিখবেন",email:"ইমেইল",post:"সোশ্যাল পোস্ট",article:"আর্টিকেল",
+ topic:"বিষয় লিখুন",gen:"লেখা তৈরি করুন",pickDoc:"PDF বা টেক্সট ফাইল বেছে নিন",sum:"সারাংশ করুন",
+ pickData:"ছবি বা CSV ফাইল বেছে নিন",ana:"বিশ্লেষণ করুন",tooMany:"সাধারণ ভার্সনে সর্বোচ্চ ",imgsU:"টি ছবি",
+ tooBig:"ফাইল অনেক বড়। সর্বোচ্চ ",mb:" মেগাবাইট",noFile:"আগে একটা ফাইল বেছে নিন",wait:"ভাবছি…",
+ demo:"[নমুনা উত্তর: আসল এআই সংযোগ এখনো চালু হয়নি]",loginErr:"লগইন হয়নি। Firebase-এ Google সাইন-ইন চালু আছে কি না দেখুন।",
+ proDemo:"প্রো (নমুনা)",em:"ইমেইল",pw:"পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)",si:"লগইন",su:"নতুন অ্যাকাউন্ট",fg:"পাসওয়ার্ড ভুলে গেছেন?",or:"অথবা",gl:"গুগল দিয়ে চালিয়ে যান",sent:"পাসওয়ার্ড রিসেটের লিংক ইমেইলে পাঠানো হয়েছে",needEm:"আগে ইমেইল লিখুন",hist:"হিস্ট্রি",newc:"নতুন",noh:"এখনো কোনো হিস্ট্রি নেই",del:"মুছুন",e_cred:"ইমেইল বা পাসওয়ার্ড ভুল",e_used:"এই ইমেইলে আগেই অ্যাকাউন্ট আছে",e_weak:"পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে",e_mail:"ইমেইলটা ঠিক নয়",e_off:"Firebase-এ এই লগইন পদ্ধতি এখনো চালু করা হয়নি",e_net:"নেটওয়ার্কে সমস্যা, আবার চেষ্টা করুন",e_dom:"এই ঠিকানা Firebase-এ অনুমোদিত নয় (Authorized domains দেখুন)",e_gen:"লগইন হয়নি, আবার চেষ্টা করুন",e_pop:"ব্রাউজার লগইন উইন্ডো আটকে দিয়েছে। পপআপের অনুমতি দিন, বা ইমেইল-পাসওয়ার্ড দিয়ে ঢুকুন",e_closed:"লগইন উইন্ডো বন্ধ হয়ে গেছে, আবার চেষ্টা করুন",e_stor:"ব্রাউজারে স্টোরেজ বন্ধ আছে। অ্যাপটা Chrome-এ খুলুন",e_many:"অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পরে আবার চেষ্টা করুন",hintG:"গুগল লগইন কাজ না করলে ঠিকানাটা Chrome ব্রাউজারে খুলুন (টেলিগ্রাম বা ফেসবুকের মতো অ্যাপের ভেতরের ব্রাউজারে গুগল লগইন আটকে যেতে পারে), অথবা ইমেইল-পাসওয়ার্ড ব্যবহার করুন।",hErr:"হিস্ট্রি সেভ হয়নি। Firestore চালু ও নিয়ম (rules) ঠিক আছে কি না দেখুন।",cv:"সিভি/রিজিউমে",job:"চাকরির আবেদনপত্র",caption:"ফেসবুক/ইনস্টাগ্রাম ক্যাপশন",product:"পণ্যের বর্ণনা",grammar:"বানান ও ব্যাকরণ ঠিক করা",summ:"সংক্ষেপ করা",verify:"যাচাই করে (ধীর, বেশি নির্ভুল)",speak:"পড়ে শোনান",regen:"আবার উত্তর",cUse:"প্রতিদিন ব্যবহার",cImg:"একসাথে ছবি",cFile:"ফাইলের আকার",cAll:"পাঁচটা টুল ও হিস্ট্রি",unl:"সীমাহীন",cNote:"এই সীমার ওপরে এআই-এর নিজের সীমাও প্রযোজ্য।",pop:"জনপ্রিয়",best:"সবচেয়ে সাশ্রয়ী",m1:"১ মাস",m6:"৬ মাস",y1:"১ বছর",pplan:"কোন প্যাকেজ",proTitle:"প্রো ভার্সন",pf1:"প্রতিদিন সীমাহীন ব্যবহার (২ ঘণ্টার সীমা নেই)",pf2:"একসাথে ২০টি পর্যন্ত ছবি",pf3:"বড় ফাইল আপলোড",proHow:"টাকা পাঠানোর পর নিচে লেনদেন আইডি (TrxID) জমা দিন। যাচাই হলে আপনার অ্যাকাউন্ট প্রো হবে, তখন পাতাটা রিলোড করুন।",pmeth:"কোন মাধ্যমে পাঠিয়েছেন",ptx:"লেনদেন আইডি (TrxID)",psend:"অনুরোধ পাঠান",close:"বন্ধ করুন",psent:"অনুরোধ পাঠানো হয়েছে। যাচাইয়ের পর প্রো চালু হবে।",pwait:"আপনার অনুরোধ যাচাইয়ের অপেক্ষায় আছে। প্রো চালু হলে পাতাটা রিলোড করুন।",perr:"লেনদেন আইডি লিখুন (সর্বোচ্চ ৪০ অক্ষর)",perr2:"অনুরোধ পাঠানো যায়নি। Firestore ও rules ঠিক আছে কি না দেখুন।",size:"লেখার আকার",plan:"ভার্সন",tap:"(প্রো নিতে চাপুন)",auto:"উত্তর নিজে নিজে পড়ুক",autoOn:"চালু আছে, বন্ধ করতে চাপুন",hsearch:"খুঁজুন…",tr:"অনুবাদ",mode:"ধরন",m_gen:"সাধারণ",m_study:"পড়াশোনা",m_code:"কোডিং",m_biz:"ব্যবসা",detail:"বিস্তারিত",brief:"সংক্ষেপে",copy:"কপি",mic:"বলুন",micNo:"এই ব্রাউজারে ভয়েস ইনপুট চলে না",tto:"কোন ভাষায় অনুবাদ হবে",te:"ইংরেজি",tb:"বাংলা",trph:"অনুবাদ করার লেখা",trgo:"অনুবাদ করুন",s1:"বাংলাদেশে ছোট ব্যবসা শুরু করার ধাপগুলো কী?",s2:"একটা ভদ্র ইমেইলের খসড়া লিখে দাও",s3:"জাভাস্ক্রিপ্টে লুপ কীভাবে কাজ করে?",note:"সময়ের হিসাব এখন শুধু এই ব্রাউজারে রাখা হচ্ছে। সার্ভারে নিরাপদ হিসাব পরে যোগ হবে."},
+en:{tag:"Chat, writing, documents and image/data, all in one place",login:"Sign in with Google",logout:"Sign out",
+ chat:"Chat",write:"Write",docs:"Documents",data:"Image/Data",free:"Free",pro:"Pro",
+ left:"Left today",h:"h",m:"min",locked:"Today's 2 free hours are used up. Come back tomorrow or switch to Pro.",
+ ph:"Type your question",send:"Send",kind:"What to write",email:"Email",post:"Social post",article:"Article",
+ topic:"Describe the topic",gen:"Write it",pickDoc:"Choose a PDF or text file",sum:"Summarize",
+ pickData:"Choose images or a CSV file",ana:"Analyze",tooMany:"Free plan allows up to ",imgsU:" images",
+ tooBig:"File is too large. Limit: ",mb:" MB",noFile:"Choose a file first",wait:"Thinking…",
+ demo:"[Sample reply: the real AI connection is not switched on yet]",loginErr:"Sign-in failed. Check that Google sign-in is enabled in Firebase.",
+ proDemo:"Pro (demo)",em:"Email",pw:"Password (6+ characters)",si:"Sign in",su:"Create account",fg:"Forgot password?",or:"or",gl:"Continue with Google",sent:"Password reset link sent to your email",needEm:"Enter your email first",hist:"History",newc:"New",noh:"No history yet",del:"Delete",e_cred:"Wrong email or password",e_used:"An account with this email already exists",e_weak:"Password must be at least 6 characters",e_mail:"That email address is not valid",e_off:"This sign-in method is not enabled in Firebase yet",e_net:"Network problem, try again",e_dom:"This address is not authorized in Firebase (see Authorized domains)",e_gen:"Sign-in failed, try again",e_pop:"The browser blocked the sign-in window. Allow pop-ups, or sign in with email and password",e_closed:"The sign-in window was closed, try again",e_stor:"Browser storage is turned off. Open the app in Chrome",e_many:"Too many attempts, try again in a while",hintG:"If Google sign-in does not work, open this address in the Chrome browser (it can fail inside apps like Telegram or Facebook), or use email and password.",hErr:"History was not saved. Check that Firestore is on and the rules are set.",cv:"CV / Resume",job:"Job application",caption:"Social media caption",product:"Product description",grammar:"Fix spelling & grammar",summ:"Shorten / summarize",verify:"Verified (slower, more accurate)",speak:"Read aloud",regen:"Regenerate",cUse:"Daily use",cImg:"Images at once",cFile:"File size",cAll:"All five tools and history",unl:"Unlimited",cNote:"The AI model's own limits apply on top of these.",pop:"Popular",best:"Best value",m1:"1 month",m6:"6 months",y1:"1 year",pplan:"Package",proTitle:"Pro plan",pf1:"Unlimited daily use (no 2-hour limit)",pf2:"Up to 20 images at once",pf3:"Larger file uploads",proHow:"After sending the money, submit the transaction ID (TrxID) below. Once checked, your account becomes Pro; then reload the page.",pmeth:"Sent via",ptx:"Transaction ID (TrxID)",psend:"Send request",close:"Close",psent:"Request sent. Pro will turn on after it is checked.",pwait:"Your request is waiting to be checked. Reload the page once Pro is on.",perr:"Enter the transaction ID (max 40 characters)",perr2:"The request could not be sent. Check that Firestore and the rules are set.",size:"Text size",plan:"Plan",tap:"(tap to get Pro)",auto:"Read answers aloud",autoOn:"On, tap to stop",hsearch:"Search…",tr:"Translate",mode:"Mode",m_gen:"General",m_study:"Study",m_code:"Coding",m_biz:"Business",detail:"Detailed",brief:"Brief",copy:"Copy",mic:"Speak",micNo:"Voice input is not supported in this browser",tto:"Translate into",te:"English",tb:"Bengali",trph:"Text to translate",trgo:"Translate",s1:"What are the steps to start a small business?",s2:"Draft a polite email for me",s3:"How do loops work in JavaScript?",note:"Time is counted in this browser only for now. Secure server-side counting comes later."}
+};
+
+let lang = localStorage.getItem("osai_lang") || "bn";
+let opts = {mode:"gen", detail:"brief"};
+let autoRead = false, lastAns = "";
+let serverPlan = "free", hasPending = false, proUntil = "";
+let isAdmin = false, view = "app", adm = {pay:[], users:[], f:"pending", q:"", err:""};
+let tab = "chat", user = null, busy = false, hist = [];
+let hq = "";
+const fresh = k => ({id:null, tool:k, items:[]});
+let cur = fresh("chat");
+const $ = s => document.querySelector(s);
+const TYPING = '<span class="typing" role="status" aria-label="..."><b></b><b></b><b></b><b></b></span>';
+const t = k => T[lang][k];
+const day = () => new Date().toISOString().slice(0,10);
+const planKey = () => "osai_plan_" + user.uid;
+const useKey = () => "osai_use_" + user.uid + "_" + day();
+const plan = () => serverPlan;
+const used = () => +(localStorage.getItem(useKey()) || 0);
+const left = () => Math.max(0, LIM[plan()].secs - used());
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const md = s => esc(String(s)).replace(/```(?:\w+)?\n?([\s\S]*?)```/g, (_, c) => `<pre><code>${c}</code></pre>`).replace(/`([^`\n]+)`/g, "<code>$1</code>").replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>");
+function speak(x){ try{ speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(String(x).replace(/[`*#]/g, "")); u.lang = lang === "bn" ? "bn-BD" : "en-US"; speechSynthesis.speak(u); }catch(e){} }
+function sys(){
+  const how = lang === "bn" ? "Reply in Bengali (বাংলা) unless the user writes in another language." : "Reply in English unless the user writes in another language.";
+  const modes = {gen:"You are a general assistant.", study:"Act as a patient tutor: explain step by step with a simple example.", code:"Act as a senior software engineer: give minimal working code in fenced blocks, then a short explanation.", biz:"Act as a practical business advisor: give concrete steps and examples, relevant to small businesses in Bangladesh where useful."};
+  return "You are OS AI. " + how + " " + modes[opts.mode] + " Answer the question directly in the first sentence, then add only the useful detail. " + (opts.detail === "detail" ? "Give a thorough, well-structured answer." : "Keep it short and clear.") + " Be accurate: never invent facts, names, numbers or sources. If you are unsure, or the answer depends on recent events you cannot know, say so plainly. Ask one clarifying question only if the request is truly ambiguous. For medical, legal or financial topics give useful general information and say when a professional should be consulted.";
+}
+
+async function askAI(tool, text, files){
+  if(!AI_ENDPOINT){ await new Promise(r => setTimeout(r, 600));
+    return t("demo") + "\n\n(" + tool + ") " + (text || files.map(f => f.name).join(", ")); }
+  const token = await user.getIdToken();
+  const r = await fetch(AI_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json", Authorization:"Bearer " + token},
+    body: JSON.stringify({tool, text, lang, plan: plan(), system: sys(), opts, files: files.map(f => f.name)})});
+  return (await r.json()).reply;
+}
+
+
+const wideNow = () => matchMedia("(min-width:820px)").matches;
+function sideHTML(){
+  const items = hist.filter(h => !hq || h.title.toLowerCase().includes(hq)).map(h => `<li><button class="hi${h.id === cur.id ? " on" : ""}" data-id="${h.id}">${esc(h.title)}<small>${t(h.tool)}</small></button><button class="hx" data-del="${h.id}" aria-label="${t("del")}">×</button></li>`).join("");
+  return `<details ${wideNow() ? "open" : ""}><summary>${t("hist")}</summary><button class="btn g sm" id="nc">+ ${t("newc")}</button><input type="text" id="hs" placeholder="${t("hsearch")}" value="${esc(hq)}"><ul class="hl">${items || `<li class="note">${t("noh")}</li>`}</ul></details>`;
+}
+function wireSide(){
+  const s = $("#side"); if(!s) return;
+  const n = $("#nc"); if(n) n.onclick = () => { cur = fresh(tab); render(); };
+  const hs = $("#hs"); if(hs) hs.oninput = e => { hq = e.target.value.toLowerCase(); s.innerHTML = sideHTML(); wireSide(); const i = $("#hs"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); };
+  s.querySelectorAll("[data-id]").forEach(b => b.onclick = () => { const h = hist.find(x => x.id === b.dataset.id); if(h){ tab = h.tool; cur = {id:h.id, tool:h.tool, items:h.items.slice()}; render(); } });
+  s.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+    try{ await deleteDoc(doc(db, "users", user.uid, "history", b.dataset.del)); }catch(e){}
+    hist = hist.filter(x => x.id !== b.dataset.del); if(cur.id === b.dataset.del) cur = fresh(tab); render(); });
+}
+async function loadHist(){
+  try{ const q = query(collection(db, "users", user.uid, "history"), orderBy("updated", "desc"), limit(50));
+    hist = (await getDocs(q)).docs.map(d => ({id:d.id, ...d.data()})); }catch(e){ hist = []; }
+}
+async function saveSession(){
+  try{
+    const ref = cur.id ? doc(db, "users", user.uid, "history", cur.id) : doc(collection(db, "users", user.uid, "history"));
+    cur.id = ref.id;
+    const items = cur.items.map(i => ({role:i.role, text:String(i.text).slice(0, 8000)}));
+    const title = (items[0] ? items[0].text : "").slice(0, 40) || "…";
+    await setDoc(ref, {tool:cur.tool, title, items, updated:serverTimestamp()});
+    hist = [{id:ref.id, tool:cur.tool, title, items}, ...hist.filter(x => x.id !== ref.id)];
+    const s = $("#side"); if(s){ s.innerHTML = sideHTML(); wireSide(); }
+  }catch(e){ const n = document.querySelector(".note"); if(n) n.textContent = t("hErr"); }
+}
+
+async function loadPlan(){
+  serverPlan = "free"; hasPending = false; proUntil = "";
+  try{ const d = await getDoc(doc(db, "users", user.uid)); if(d.exists() && d.data().plan === "pro"){ const u = d.data().proUntil; if(!u || new Date(u + "T23:59:59") >= new Date()){ serverPlan = "pro"; proUntil = u || ""; } } }catch(e){}
+  try{ const s = await getDocs(query(collection(db, "payments"), where("uid", "==", user.uid))); hasPending = s.docs.some(x => x.data().status === "pending"); }catch(e){}
+}
+function openPro(){
+  const d = document.createElement("div"); d.className = "ov";
+  d.innerHTML = `<div class="dlg" role="dialog" aria-modal="true" aria-label="Pro"><h2>⭐ ${t("proTitle")}</h2><table class="cmp"><tr><th></th><th>${t("free")}</th><th>⭐ ${t("pro")}</th></tr><tr><td>${t("cUse")}</td><td>${LIM.free.secs / 3600} ${t("h")}</td><td>${t("unl")}</td></tr><tr><td>${t("cImg")}</td><td>${LIM.free.imgs}</td><td>${LIM.pro.imgs}</td></tr><tr><td>${t("cFile")}</td><td>${LIM.free.mb} MB</td><td>${LIM.pro.mb} MB</td></tr><tr><td>${t("cAll")}</td><td>✓</td><td>✓</td></tr></table><p class="note">${t("cNote")}</p><div class="pay">bKash (Personal): ${esc(PAY.bkash)}<br>Rocket (Agent): ${esc(PAY.rocket)}<br><small>${t("proHow")}</small></div>${hasPending ? `<p class="note">${t("pwait")}</p>` : `<div class="plans">${PAY.plans.map((p, i) => `<label class="pcard"><input type="radio" name="pl" value="${p.id}"${i === 1 ? " checked" : ""}><b>${t(p.id)}</b><span>${esc(p.price)}</span><small>${esc(p.per)}${p.tag ? " · " + t(p.tag) : ""}</small></label>`).join("")}</div><label for="pm">${t("pmeth")}</label><select id="pm"><option>bKash</option><option>Rocket</option></select><label for="tx">${t("ptx")}</label><input type="text" id="tx" maxlength="40">`}<div class="row2">${hasPending ? "" : `<button class="btn" id="psend">${t("psend")}</button>`}<button class="btn g" id="pclose">${t("close")}</button></div><div class="err" id="pmsg"></div></div>`;
+  document.body.append(d);
+  const onEsc = e => { if(e.key === "Escape") close(); };
+  const close = () => { d.remove(); document.removeEventListener("keydown", onEsc); };
+  document.addEventListener("keydown", onEsc);
+  d.onclick = e => { if(e.target === d) close(); };
+  d.querySelector("#pclose").onclick = close;
+  const ps = d.querySelector("#psend");
+  if(ps) ps.onclick = async () => {
+    const tx = d.querySelector("#tx").value.trim(), msg = d.querySelector("#pmsg");
+    if(!tx || tx.length > 40){ msg.textContent = t("perr"); return; }
+    ps.disabled = true;
+    try{
+      await addDoc(collection(db, "payments"), {uid:user.uid, planId:d.querySelector('input[name="pl"]:checked').value, method:d.querySelector("#pm").value, txid:tx, note:(user.email || "").slice(0, 80), status:"pending", createdAt:serverTimestamp()});
+      hasPending = true; msg.textContent = "";
+      d.querySelector(".pay").insertAdjacentHTML("afterend", `<p class="note">${t("psent")}</p>`); ps.remove();
+    }catch(e){ msg.textContent = t("perr2"); ps.disabled = false; }
+  };
+}
+
+const ymd = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+const addMonths = (s, m) => { const x = new Date(s + "T00:00:00"); x.setMonth(x.getMonth() + m); return ymd(x); };
+const addDays = (s, n) => { const x = new Date(s + "T00:00:00"); x.setDate(x.getDate() + n); return ymd(x); };
+async function loadAdmin(){
+  try{
+    const [p, u] = await Promise.all([getDocs(query(collection(db, "payments"), orderBy("createdAt", "desc"), limit(200))), getDocs(query(collection(db, "users"), limit(500)))]);
+    adm.pay = p.docs.map(d => ({id:d.id, ...d.data()}));
+    adm.users = u.docs.map(d => ({id:d.id, ...d.data()}));
+  }catch(e){ adm.err = "ডাটা আনা যায়নি। Rules-এ অ্যাডমিন অনুমতি আর admins ডকুমেন্ট ঠিক আছে কি না দেখুন।"; }
+}
+function renderAdmin(){
+  const app = $("#app"), P = adm.pay, today = ymd(new Date());
+  const amt = id => (PAY.plans.find(p => p.id === id) || {}).amount || 0;
+  const cnt = s => P.filter(x => x.status === s).length;
+  const rev = P.filter(x => x.status === "approved").reduce((a, x) => a + amt(x.planId), 0);
+  const act = adm.users.filter(u => u.plan === "pro" && (!u.proUntil || u.proUntil >= today));
+  const soon = act.filter(u => u.proUntil && u.proUntil <= addDays(today, 7)).length;
+  const q = adm.q.toLowerCase();
+  const list = P.filter(x => x.status === adm.f && (!q || ((x.txid || "") + " " + (x.note || "") + " " + (x.uid || "")).toLowerCase().includes(q)));
+  const lbl = {pending:"অপেক্ষায়", approved:"অনুমোদিত", rejected:"বাতিল"};
+  app.innerHTML = `<div class="panel adm"><h2>🛠 অ্যাডমিন প্যানেল</h2>
+    <div class="stats"><div><b>${cnt("pending")}</b><small>অপেক্ষায়</small></div><div><b>${act.length}</b><small>সক্রিয় প্রো</small></div><div><b>${soon}</b><small>৭ দিনে শেষ হবে</small></div><div><b>৳${rev.toLocaleString("en-US")}</b><small>অনুমোদিত আয়</small></div></div>
+    ${adm.err ? `<div class="err">${esc(adm.err)}</div>` : ""}
+    <div class="tabs">${["pending", "approved", "rejected"].map(s => `<button data-f="${s}" aria-selected="${s === adm.f}">${lbl[s]} (${cnt(s)})</button>`).join("")}</div>
+    <input type="text" id="aq" placeholder="TrxID / ইমেইল / uid খুঁজুন" value="${esc(adm.q)}">
+    <div class="al">${list.map(x => `<div class="ar"><div><b>${esc(x.note || x.uid || "")}</b> · ${esc(x.planId || "")} · ${esc(x.method || "")} · ৳${amt(x.planId)}<br>TrxID: <code>${esc(x.txid || "")}</code><br><small>${x.createdAt && x.createdAt.toDate ? x.createdAt.toDate().toLocaleString("bn-BD") : ""} · ${esc(x.uid || "")}</small></div>${x.status === "pending" ? `<div class="aa"><button class="btn sm" data-ok="${x.id}">✅ অনুমোদন</button><button class="btn g sm" data-no="${x.id}">❌ বাতিল</button></div>` : ""}</div>`).join("") || `<p class="note">কিছু নেই</p>`}</div>
+    <h3>সক্রিয় প্রো ব্যবহারকারী</h3>
+    <div class="al">${act.map(u => `<div class="ar"><div><b>${esc(u.email || u.id)}</b><br><small>${u.proUntil ? "শেষ: " + esc(u.proUntil) : "মেয়াদ নেই"} · ${esc(u.id)}</small></div><div class="aa"><button class="btn g sm" data-ext="${u.id}">+১ মাস</button><button class="btn g sm" data-rev="${u.id}">বন্ধ</button></div></div>`).join("") || `<p class="note">কেউ নেই</p>`}</div></div>`;
+  app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { adm.f = b.dataset.f; renderAdmin(); });
+  $("#aq").oninput = e => { adm.q = e.target.value; renderAdmin(); const i = $("#aq"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); };
+  const run = async fn => { adm.err = ""; try{ await fn(); }catch(e){ adm.err = "সংরক্ষণ হয়নি: " + (e.code || e.message); } await loadAdmin(); renderAdmin(); };
+  const baseOf = u => (u && u.plan === "pro" && u.proUntil && u.proUntil >= today) ? u.proUntil : today;
+  app.querySelectorAll("[data-ok]").forEach(b => b.onclick = () => run(async () => {
+    const x = P.find(y => y.id === b.dataset.ok), m = {m1:1, m6:6, y1:12}[x.planId] || 1;
+    const until = addMonths(baseOf(adm.users.find(u => u.id === x.uid)), m), bt = writeBatch(db);
+    bt.set(doc(db, "users", x.uid), {plan:"pro", proUntil:until, email:x.note || "", updated:serverTimestamp()}, {merge:true});
+    bt.update(doc(db, "payments", x.id), {status:"approved", approvedAt:serverTimestamp()});
+    await bt.commit(); }));
+  app.querySelectorAll("[data-no]").forEach(b => b.onclick = () => run(() => updateDoc(doc(db, "payments", b.dataset.no), {status:"rejected"})));
+  app.querySelectorAll("[data-ext]").forEach(b => b.onclick = () => run(() => updateDoc(doc(db, "users", b.dataset.ext), {proUntil:addMonths(baseOf(adm.users.find(u => u.id === b.dataset.ext)), 1)})));
+  app.querySelectorAll("[data-rev]").forEach(b => b.onclick = () => run(() => updateDoc(doc(db, "users", b.dataset.rev), {plan:"free"})));
+}
+
+function head(){
+  $("#lang").textContent = "🌐 " + (lang === "bn" ? "English" : "বাংলা"); $("#fs").textContent = "Aa  " + t("size");
+  const p = $("#plan"), o = $("#out");
+  p.hidden = o.hidden = !user; $("#adm").hidden = !(user && isAdmin); $("#adm").textContent = view === "admin" ? "← অ্যাপে ফিরুন" : "🛠 অ্যাডমিন প্যানেল";
+  if(user){
+    p.textContent = "⭐ " + t("plan") + ": " + (plan() === "pro" ? t("pro") : t("free")) + (plan() === "pro" ? (proUntil ? " · " + proUntil : "") : " " + t("tap"));
+    p.className = "pill" + (plan() === "pro" ? " pro" : "");
+    p.title = t("pro");
+    o.textContent = "↩ " + t("logout");
+  }
+}
+
+function meter(){
+  if(plan() === "pro") return "";
+  const l = left(), pct = Math.round(l / LIM.free.secs * 100);
+  return `<p class="meter" id="meter">${t("left")}: <b>${Math.floor(l/3600)}</b> ${t("h")} <b>${Math.floor(l%3600/60)}</b> ${t("m")}<span class="bar"><i style="width:${pct}%"></i></span></p>`;
+}
+
+function render(){
+  head();
+  const app = $("#app");
+  if(user && isAdmin && view === "admin"){ renderAdmin(); return; }
+  if(!user){
+    app.innerHTML = `<section class="login"><div class="stage"><div class="cube">${["chat","write","docs","data"].map(k => `<i>${t(k)}</i>`).join("")}</div></div><h1>OS AI</h1><p>${t("tag")}</p><div class="auth"><label for="em">${t("em")}</label><input type="text" id="em" inputmode="email" autocomplete="email"><label for="pw">${t("pw")}</label><input type="password" id="pw" autocomplete="current-password"><div class="row2"><button class="btn" id="si">${t("si")}</button><button class="btn g" id="su">${t("su")}</button></div><button class="lnk" id="fg">${t("fg")}</button><div class="or">${t("or")}</div><button class="btn big" id="gl">${t("gl")}</button><div class="err" id="le"></div><p class="note">${t("hintG")}</p></div></section>`;
+    const fail = e => { const m = {"auth/invalid-credential":"e_cred","auth/wrong-password":"e_cred","auth/user-not-found":"e_cred","auth/email-already-in-use":"e_used","auth/weak-password":"e_weak","auth/invalid-email":"e_mail","auth/operation-not-allowed":"e_off","auth/network-request-failed":"e_net","auth/unauthorized-domain":"e_dom","auth/popup-blocked":"e_pop","auth/popup-closed-by-user":"e_closed","auth/web-storage-unsupported":"e_stor","auth/too-many-requests":"e_many"}[e.code]; if(e.code === "auth/cancelled-popup-request") return; $("#le").textContent = t(m || "e_gen"); };
+    const cred = () => [$("#em").value.trim(), $("#pw").value];
+    $("#gl").onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(fail);
+    $("#si").onclick = () => signInWithEmailAndPassword(auth, ...cred()).catch(fail);
+    $("#su").onclick = () => createUserWithEmailAndPassword(auth, ...cred()).catch(fail);
+    $("#fg").onclick = () => { const e = $("#em").value.trim(); if(!e){ $("#le").textContent = t("needEm"); return; } sendPasswordResetEmail(auth, e).then(() => { $("#le").textContent = t("sent"); }).catch(fail); };
+    return;
+  }
+  const tabs = ["chat","write","docs","data","tr"].map(k => `<button role="tab" data-t="${k}" aria-selected="${k===tab}">${t(k)}</button>`).join("");
+  let body;
+  if(left() <= 0) body = `<div class="lock">${t("locked")}<p><button class="btn" id="up">⭐ ${t("pro")}</button></p></div>`;
+  else if(tab === "chat") body = `<div class="bar2"><label class="sr" for="md">${t("mode")}</label><select id="md"><option value="gen">${t("m_gen")}</option><option value="study">${t("m_study")}</option><option value="code">${t("m_code")}</option><option value="biz">${t("m_biz")}</option></select><select id="dt" aria-label="${t("detail")}"><option value="brief">${t("brief")}</option><option value="detail">${t("detail")}</option><option value="verify">${t("verify")}</option></select><button class="pill" id="ar" aria-pressed="false">🔊 ${t("auto")}</button></div><div class="msgs" id="msgs"></div><div class="chips" id="chips"></div><div class="row"><input type="text" id="q" placeholder="${t("ph")}"><button class="btn" id="go">${t("send")}</button></div>`;
+  else if(tab === "tr") body = `<label for="to">${t("tto")}</label><select id="to"><option value="en">${t("te")}</option><option value="bn">${t("tb")}</option></select><label for="q">${t("trph")}</label><textarea id="q"></textarea><p><button class="btn" id="go">${t("trgo")}</button></p><div id="res"></div>`;
+  else if(tab === "write") body = `<label for="k">${t("kind")}</label><select id="k"><option value="email">${t("email")}</option><option value="post">${t("post")}</option><option value="article">${t("article")}</option><option value="cv">${t("cv")}</option><option value="job">${t("job")}</option><option value="caption">${t("caption")}</option><option value="product">${t("product")}</option><option value="grammar">${t("grammar")}</option><option value="summ">${t("summ")}</option></select><label for="q">${t("topic")}</label><textarea id="q"></textarea><p><button class="btn" id="go">${t("gen")}</button></p><div id="res"></div>`;
+  else body = `<label for="f">${t(tab === "docs" ? "pickDoc" : "pickData")}</label><input type="file" id="f" ${tab === "docs" ? 'accept=".pdf,.txt,.md,.docx"' : 'accept="image/*,.csv" multiple'}><p><button class="btn" id="go">${t(tab === "docs" ? "sum" : "ana")}</button></p><div id="res"></div>`;
+  app.innerHTML = `<div class="shell"><aside id="side" class="side">${sideHTML()}</aside><div><div class="tabs" role="tablist">${tabs}</div><div class="panel">${meter()}${body}<div class="note">${t("note")}</div></div></div></div>`;
+  app.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { tab = b.dataset.t; cur = fresh(tab); render(); });
+  wireSide(); const up = $("#up"); if(up) up.onclick = openPro; if(left() > 0) wire();
+}
+
+function wire(){
+  const go = $("#go"), q = $("#q"), res = $("#res");
+  if(tab === "chat"){
+    const msgs = $("#msgs");
+    const add = (c, x, ask) => {
+      if(ask) msgs.querySelectorAll(".rg").forEach(b => b.remove());
+      msgs.insertAdjacentHTML("beforeend", `<div class="m ${c}">${c === "a" ? md(x) + `<div class="acts"><button class="cp" aria-label="${t("copy")}">⧉</button><button class="sp" aria-label="${t("speak")}">🔊</button>${ask ? `<button class="rg" aria-label="${t("regen")}">↻</button>` : ""}</div>` : esc(x)}</div>`);
+      if(c === "a") lastAns = x;
+      const el = msgs.lastElementChild, cp = el.querySelector(".cp"), sp = el.querySelector(".sp"), rg = el.querySelector(".rg");
+      if(cp) cp.onclick = () => { navigator.clipboard.writeText(x).then(() => { cp.textContent = "✓"; setTimeout(() => { cp.textContent = "⧉"; }, 1200); }).catch(() => {}); };
+      if(sp) sp.onclick = () => speak(x);
+      if(rg) rg.onclick = () => { const u = el.previousElementSibling; el.remove(); if(u) u.remove(); cur.items.splice(-2); if(typeof turns !== "undefined") turns.splice(-2); q.value = ask; send(); };
+      msgs.scrollTop = msgs.scrollHeight; };
+    cur.items.forEach(i => add(i.role === "user" ? "u" : "a", i.text));
+    const ch = $("#chips");
+    if(!cur.items.length) ch.innerHTML = [1,2,3].map(n => `<button class="chip">${t("s" + n)}</button>`).join("");
+    ch.querySelectorAll(".chip").forEach(b => b.onclick = () => { q.value = b.textContent; send(); });
+    const ar = $("#ar");
+    const arLabel = () => { ar.setAttribute("aria-pressed", autoRead); ar.textContent = autoRead ? "⏹ " + t("autoOn") : "🔊 " + t("auto"); };
+    arLabel();
+    ar.onclick = () => { autoRead = !autoRead; arLabel(); if(autoRead){ if(lastAns) speak(lastAns); } else { try{ speechSynthesis.cancel(); }catch(e){} } };
+    const send = async () => { const x = q.value.trim(); if(!x || busy) return; q.value = ""; add("u", x); busy = true; go.disabled = true; ch.innerHTML = ""; opts = {mode:$("#md").value, detail:$("#dt").value};
+      const tp = document.createElement("div"); tp.className = "m a"; tp.innerHTML = TYPING; msgs.append(tp); msgs.scrollTop = msgs.scrollHeight;
+      try{ const a = await askAI("chat", x, []); tp.remove(); add("a", a, x); if(autoRead) speak(a); cur.items.push({role:"user", text:x}, {role:"ai", text:a}); saveSession(); }catch(e){ tp.remove(); add("a", "Error: " + e.message); }
+      busy = false; go.disabled = false; q.focus(); };
+    go.onclick = send; q.onkeydown = e => { if(e.key === "Enter") send(); };
+    return;
+  }
+  if(res && cur.items.length) res.innerHTML = cur.items.map(i => `<div class="out"><b>${i.role === "user" ? "›" : "✦"}</b> ${esc(i.text)}</div>`).join("");
+  go.onclick = async () => {
+    const L = LIM[plan()]; let files = [], text = "";
+    if(tab === "tr"){ text = q.value.trim(); if(!text) return; opts = {...opts, to:$("#to").value}; }
+    else if(tab === "write"){ text = $("#k").selectedOptions[0].textContent + ": " + q.value.trim(); if(!q.value.trim()) return; }
+    else {
+      files = [...$("#f").files];
+      if(!files.length){ res.innerHTML = `<div class="err">${t("noFile")}</div>`; return; }
+      const imgs = files.filter(f => f.type.startsWith("image/")).length;
+      if(imgs > L.imgs){ res.innerHTML = `<div class="err">${t("tooMany")}${L.imgs}${t("imgsU")}</div>`; return; }
+      if(files.some(f => f.size > L.mb * 1048576)){ res.innerHTML = `<div class="err">${t("tooBig")}${L.mb}${t("mb")}</div>`; return; }
+    }
+    go.disabled = true; res.innerHTML = `<div class="out">${TYPING}</div>`;
+    try{ const o = await askAI(tab, text, files); res.innerHTML = `<div class="out">${md(o)}</div>`; cur.items = [{role:"user", text:text || files.map(f => f.name).join(", ")}, {role:"ai", text:o}]; saveSession(); }
+    catch(e){ res.innerHTML = `<div class="err">Error: ${esc(e.message)}</div>`; }
+    go.disabled = false;
+  };
+}
+
+// প্রতি সেকেন্ডে ব্যবহারের সময় গোনা (শুধু সাধারণ ভার্সনে, পাতা খোলা থাকলে)
+setInterval(() => {
+  if(!user || plan() === "pro" || document.hidden) return;
+  const was = left(); if(was <= 0) return;
+  localStorage.setItem(useKey(), used() + 1);
+  if(left() <= 0) return render();
+  const m = $("#meter"); if(m){ const tmp = document.createElement("div"); tmp.innerHTML = meter(); m.replaceWith(tmp.firstElementChild); }
+}, 1000);
+
+const mb = $("#mb"), pop = $("#pop");
+const closeMenu = () => { pop.hidden = true; mb.setAttribute("aria-expanded", "false"); };
+mb.onclick = e => { e.stopPropagation(); pop.hidden = !pop.hidden; mb.setAttribute("aria-expanded", String(!pop.hidden)); };
+pop.addEventListener("click", closeMenu);
+document.addEventListener("click", e => { if(!pop.contains(e.target)) closeMenu(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeMenu(); });
+let fsz = 0;
+$("#fs").onclick = () => { fsz = (fsz + 1) % 3; document.documentElement.style.fontSize = ["100%", "115%", "130%"][fsz]; };
+$("#lang").onclick = () => { lang = lang === "bn" ? "en" : "bn"; localStorage.setItem("osai_lang", lang); document.documentElement.lang = lang; render(); };
+$("#plan").onclick = () => { if(plan() !== "pro") openPro(); };
+$("#adm").onclick = async () => { view = view === "admin" ? "app" : "admin"; if(view === "admin") await loadAdmin(); render(); };
+$("#out").onclick = () => signOut(auth);
+onAuthStateChanged(auth, async u => { user = u; hist = []; tab = "chat"; cur = fresh("chat"); view = "app"; isAdmin = false; serverPlan = "free"; hasPending = false; if(u){ await loadPlan(); await loadHist(); try{ isAdmin = (await getDoc(doc(db, "admins", u.uid))).exists(); }catch(e){} } render(); });
+document.documentElement.lang = lang;
+render();
+</script>
+</body>
+</html>
